@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import in.tech_camp.training_curriculum_java.repository.PlanRepository;
-import in.tech_camp.training_curriculum_java.form.PlanForm;
 import in.tech_camp.training_curriculum_java.entity.PlanEntity;
-
+import in.tech_camp.training_curriculum_java.form.PlanForm;
+import in.tech_camp.training_curriculum_java.repository.PlanRepository;
 import lombok.AllArgsConstructor;
 
 @Controller
@@ -44,7 +43,7 @@ public class CalendarsController {
       newPlan.setPlan(planForm.getPlan());
       planRepository.insert(newPlan);
     }
-    return "redirect:/calendars";
+    return "redirect:/";
   }
 
   private List<Map<String, Object>> get_week() {
@@ -56,6 +55,9 @@ public class CalendarsController {
     String[] wdays = {"(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"};
 
     for (int x = 0; x < 7; x++) {
+
+     
+
       Map<String, Object> dayMap = new HashMap<>();
       LocalDate currentDate = todaysDate.plusDays(x);
 
@@ -66,9 +68,16 @@ public class CalendarsController {
           }
       }
 
+      // 曜日番号を計算  dayMap.put("month", currentDate.getMonthValue());
+      int wdayNum = (todaysDate.getDayOfWeek().getValue() + x) % 7;
+
       dayMap.put("month", currentDate.getMonthValue());
       dayMap.put("date", currentDate.getDayOfMonth());
       dayMap.put("plans", todayPlans);
+      dayMap.put("wday", wdays[wdayNum]);
+
+      
+
 
       weekDays.add(dayMap);
     }
